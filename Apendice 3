@@ -1,0 +1,27 @@
+#include "IRLibAll.h"
+ 
+IRsendNEC mySender;
+int incomingByte= 0;
+  
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Ready to send IR signals");
+}
+ 
+void loop() {
+if (Serial.available() > 0) {
+  incomingByte= Serial.read();
+  Serial.print("I received it: ");
+  Serial.println(incomingByte,DEC);
+
+  switch(incomingByte){
+    case 66: 
+    mySender.send(0x10EFEB14, 32);
+    break;
+    
+    default:
+    incomingByte=0;
+  }
+  incomingByte=0;
+  }
+}
