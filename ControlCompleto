@@ -1,0 +1,52 @@
+
+#include "IRLibAll.h"
+ 
+IRsend irsend;
+
+int led = 12;
+int data;
+
+IRsendNEC mySender;
+int incomingByte= 0;
+
+void setup() {                
+  Serial.begin(9600);
+  Serial.println("READY TO WORK WITH EEG SIGNALS");
+  pinMode(led, OUTPUT);
+  pinMode(11, OUTPUT); 
+  pinMode(10, OUTPUT); 
+  pinMode(8,OUTPUT); 
+  pinMode(7,OUTPUT); 
+  digitalWrite(7,HIGH);
+   digitalWrite(8, HIGH);
+}
+
+void loop() {
+  if (Serial.available()){
+    data=Serial.read();
+    if(data=='A'){digitalWrite(led, HIGH); 
+     digitalWrite(7, LOW);} 
+    if(data=='a') {digitalWrite(led, LOW);
+     digitalWrite(7, HIGH);}     
+    if(data=='C'){digitalWrite(10, HIGH);
+     digitalWrite(8, LOW);}
+    if(data=='c'){digitalWrite(10, LOW);
+     digitalWrite(8, HIGH);}
+    delay(100);           
+}
+
+if (Serial.available() > 0) {
+  incomingByte= Serial.read();
+  Serial.print("I received it: ");
+  Serial.println(incomingByte,DEC);
+
+  switch(incomingByte){
+    case 66: 
+    mySender.send(0x10EFEB14, 32);
+    break;
+    default:
+    incomingByte=0;
+  }
+  incomingByte=0;
+  }
+}
